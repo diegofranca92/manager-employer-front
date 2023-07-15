@@ -17,9 +17,9 @@ import {
   CardBody,
   Chip,
   CardFooter,
-  Tabs,
-  TabsHeader,
-  Tab,
+  // Tabs,
+  // TabsHeader,
+  // Tab,
   Avatar,
   IconButton,
   Tooltip
@@ -27,20 +27,20 @@ import {
 import React from 'react'
 import Modal from './Modal'
 
-const TABS = [
-  {
-    label: 'All',
-    value: 'all'
-  },
-  {
-    label: 'Monitored',
-    value: 'monitored'
-  },
-  {
-    label: 'Unmonitored',
-    value: 'unmonitored'
-  }
-]
+// const TABS = [
+//   {
+//     label: 'All',
+//     value: 'all'
+//   },
+//   {
+//     label: 'Monitored',
+//     value: 'monitored'
+//   },
+//   {
+//     label: 'Unmonitored',
+//     value: 'unmonitored'
+//   }
+// ]
 
 const TABLE_HEAD = ['Member', 'Function', 'Status', 'Employed', '']
 

@@ -6,7 +6,7 @@ import {
   DialogBody,
   DialogFooter,
   Input,
-  Textarea
+  // Textarea
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 

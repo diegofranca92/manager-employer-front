@@ -10,11 +10,11 @@ import {
   Avatar
 } from '@material-tailwind/react'
 import {
-  UserCircleIcon,
   ChevronDownIcon,
-  Cog6ToothIcon,
-  InboxArrowDownIcon,
-  LifebuoyIcon,
+  // UserCircleIcon,
+  // Cog6ToothIcon,
+  // InboxArrowDownIcon,
+  // LifebuoyIcon,
   Bars3BottomLeftIcon,
   HomeIcon,
   PowerIcon
@@ -118,7 +118,7 @@ export default function NavBar() {
           as='a'
           href='#'
           className='mr-4 ml-2 cursor-pointer py-1.5 font-medium'>
-          Bix Techno
+          Employer manager
         </Typography>
         <div className='absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block'>
           <ul className='mb-4 mt-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center justify-center'>
