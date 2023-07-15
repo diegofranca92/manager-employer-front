@@ -1,12 +1,10 @@
 import Table from '../components/Table'
 import CardDash from '../components/CardDash'
-import NavBar from '../components/NavBar'
 
 export default function Home() {
   return (
     <>
       <div className='min-h-full'>
-        <NavBar />
         <main>
           <div className='mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 flex gap-4'>
             <CardDash title='Empresas' value={453} />
