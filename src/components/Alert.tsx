@@ -6,24 +6,25 @@ import {
   DialogBody,
   DialogFooter,
   Input,
+  Typography
   // Textarea
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import { IEmployer } from './Table'
 
-type ModalProps = {
+type AlertProps = {
   isOpen: boolean
   data?: IEmployer
   onClose: () => void
   onConfirm?: () => void
 }
 
-export default function Modal({
+export default function ConfimationAlert({
   isOpen,
   onClose,
   onConfirm,
   data
-}: ModalProps) {
+}: AlertProps) {
   const [employerItem, setEmployerItem] = React.useState<IEmployer>()
 
   useEffect(() => {
@@ -38,30 +39,20 @@ export default function Modal({
     <React.Fragment>
       <Dialog open={isOpen} size='xs' handler={onClose}>
         <div className='flex items-center justify-between hover:cursor-pointer'>
-          <DialogHeader>Cadastro de Funcionário</DialogHeader>
+          <DialogHeader>Excluir funcionário</DialogHeader>
           <XMarkIcon className='mr-3 h-5 w-5' onClick={onClose} />
         </div>
         <DialogBody divider>
-          <div className='flex flex-col gap-6'>
-            <Input color='blue' label='Nome' value={employerItem?.name} />
-            <Input color='blue' label='Função' value={employerItem?.job} />
-            <Input color='blue' label='Email' value={employerItem?.email} />
-            <Input
-              color='blue'
-              label='Data de admissão'
-              value={employerItem?.date}
-            />
-          </div>
+          <Typography variant='md' color='blue-gray'>
+            Tem certeza que quer deletar {employerItem?.name}?
+          </Typography>
         </DialogBody>
         <DialogFooter className='space-x-2 justify-between'>
           <Button variant='outlined' color='gray' onClick={onClose}>
-            Fechar
+            Cancelar
           </Button>
-          <Button
-            variant='gradient'
-            color='blue'
-            onClick={onConfirm ?? onClose}>
-            Salvar
+          <Button variant='gradient' color='red' onClick={onConfirm ?? onClose}>
+            Sim, exluir
           </Button>
         </DialogFooter>
       </Dialog>

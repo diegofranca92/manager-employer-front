@@ -6,7 +6,8 @@ import {
   PencilIcon,
   UserPlusIcon,
   ArrowRightIcon,
-  ArrowLeftIcon
+  ArrowLeftIcon,
+  TrashIcon
 } from '@heroicons/react/24/solid'
 import {
   Card,
@@ -26,6 +27,7 @@ import {
 } from '@material-tailwind/react'
 import React from 'react'
 import Modal from './Modal'
+import ConfimationAlert from './Alert'
 
 // const TABS = [
 //   {
@@ -41,6 +43,16 @@ import Modal from './Modal'
 //     value: 'unmonitored'
 //   }
 // ]
+
+export interface IEmployer {
+  img: string
+  name: string
+  email: string
+  job: string
+  org: string
+  online: boolean
+  date: string
+}
 
 const TABLE_HEAD = ['Member', 'Function', 'Status', 'Employed', '']
 
@@ -94,8 +106,29 @@ const TABLE_ROWS = [
 
 export default function Table() {
   const [open, setOpen] = React.useState(false)
+  const [openDelAlert, setOpenDelAlert] = React.useState(false)
+  const [employerItem, setEmployerItem] = React.useState<IEmployer>()
 
-  const handleOpen = () => setOpen(!open)
+  const handleOpen = (data?: IEmployer) => {
+    setOpen(!open)
+    if (data) {
+      setEmployerItem(data)
+    }
+  }
+
+  const handleDelete = (data?: IEmployer) => {
+    setOpenDelAlert(false)
+    console.log('Item deletado', data)
+  }
+
+  function handleOpenDelAlert(data: IEmployer) {
+    setOpenDelAlert(!openDelAlert)
+    if (data) {
+      setEmployerItem(data)
+    }
+    
+  }
+
 
   const [active, setActive] = React.useState(1)
 
@@ -131,10 +164,11 @@ export default function Table() {
             </div>
             <Button
               className='flex items-center gap-3'
-              onClick={handleOpen}
+              onClick={() => handleOpen()}
               color='blue'
               size='sm'>
-              <UserPlusIcon strokeWidth={2} className='h-4 w-4' /> Novo funcionário
+              <UserPlusIcon strokeWidth={2} className='h-4 w-4' /> Novo
+              funcionário
             </Button>
           </div>
         </CardHeader>
@@ -163,79 +197,92 @@ export default function Table() {
               </tr>
             </thead>
             <tbody>
-              {TABLE_ROWS.map(
-                ({ img, name, email, job, org, online, date }, index) => {
-                  const isLast = index === TABLE_ROWS.length - 1
-                  const classes = isLast
-                    ? 'p-4'
-                    : 'p-4 border-b border-blue-gray-50'
+              {TABLE_ROWS.map((employer, index) => {
+                const isLast = index === TABLE_ROWS.length - 1
+                const classes = isLast
+                  ? 'p-4'
+                  : 'p-4 border-b border-blue-gray-50'
 
-                  return (
-                    <tr key={name}>
-                      <td className={classes}>
-                        <div className='flex items-center gap-3'>
-                          <Avatar src={img} alt={name} size='sm' />
-                          <div className='flex flex-col'>
-                            <Typography
-                              variant='small'
-                              color='blue-gray'
-                              className='font-normal'>
-                              {name}
-                            </Typography>
-                            <Typography
-                              variant='small'
-                              color='blue-gray'
-                              className='font-normal opacity-70'>
-                              {email}
-                            </Typography>
-                          </div>
-                        </div>
-                      </td>
-                      <td className={classes}>
+                return (
+                  <tr key={employer.name}>
+                    <td className={classes}>
+                      <div className='flex items-center gap-3'>
+                        <Avatar
+                          src={employer.img}
+                          alt={employer.name}
+                          size='sm'
+                        />
                         <div className='flex flex-col'>
                           <Typography
                             variant='small'
                             color='blue-gray'
                             className='font-normal'>
-                            {job}
+                            {employer.name}
                           </Typography>
                           <Typography
                             variant='small'
                             color='blue-gray'
                             className='font-normal opacity-70'>
-                            {org}
+                            {employer.email}
                           </Typography>
                         </div>
-                      </td>
-                      <td className={classes}>
-                        <div className='w-max'>
-                          <Chip
-                            variant='ghost'
-                            size='sm'
-                            value={online ? 'online' : 'offline'}
-                            color={online ? 'green' : 'blue-gray'}
-                          />
-                        </div>
-                      </td>
-                      <td className={classes}>
+                      </div>
+                    </td>
+                    <td className={classes}>
+                      <div className='flex flex-col'>
                         <Typography
                           variant='small'
                           color='blue-gray'
                           className='font-normal'>
-                          {date}
+                          {employer.job}
                         </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Tooltip content='Edit User'>
-                          <IconButton onClick={handleOpen} variant='text' color='blue-gray'>
-                            <PencilIcon className='h-4 w-4' />
-                          </IconButton>
-                        </Tooltip>
-                      </td>
-                    </tr>
-                  )
-                }
-              )}
+                        <Typography
+                          variant='small'
+                          color='blue-gray'
+                          className='font-normal opacity-70'>
+                          {employer.org}
+                        </Typography>
+                      </div>
+                    </td>
+                    <td className={classes}>
+                      <div className='w-max'>
+                        <Chip
+                          variant='ghost'
+                          size='sm'
+                          value={employer.online ? 'online' : 'offline'}
+                          color={employer.online ? 'green' : 'blue-gray'}
+                        />
+                      </div>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant='small'
+                        color='blue-gray'
+                        className='font-normal'>
+                        {employer.date}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Tooltip content='Editar Funcionário'>
+                        <IconButton
+                          onClick={() => handleOpen(employer)}
+                          variant='text'
+                          color='blue-gray'>
+                          <PencilIcon className='h-4 w-4' />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip content='Excluir Funcionário'>
+                        <IconButton
+                          onClick={() => handleOpenDelAlert(employer)}
+                          variant='text'
+                          color='red'>
+                          <TrashIcon className='h-4 w-4' />
+                        </IconButton>
+                      </Tooltip>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </CardBody>
@@ -268,7 +315,8 @@ export default function Table() {
           </div>
         </CardFooter>
       </Card>
-      <Modal isOpen={open} onClose={handleOpen} />
+      <ConfimationAlert isOpen={openDelAlert} data={employerItem} onConfirm={handleDelete} onClose={() => setOpenDelAlert(false)}/>
+      <Modal isOpen={open} data={employerItem} onClose={handleOpen} />
     </>
   )
 }
