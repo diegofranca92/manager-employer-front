@@ -39,6 +39,7 @@ export default function CompanyModal({ isOpen, onClose, data }: ModalProps) {
     } catch (error) {
       console.log(error)
     }
+    onClose()
   }
 
   useEffect(() => {

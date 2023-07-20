@@ -6,7 +6,7 @@ import CompanyTable from '../components/CompanyTable'
 import { Typography } from '@material-tailwind/react'
 export default function Home() {
   const tableCompanyHeader = ['Nome', 'Site', 'Ações']
-  const tableEmployerHeader = ['Nome', 'Função', 'Entrada', 'Ações']
+  const tableEmployerHeader = ['Nome', 'Função | Empresa', 'Entrada', 'Ações']
   const [employerList, setEmployerList] = React.useState<Employer.IEmployer[]>(
     []
   )

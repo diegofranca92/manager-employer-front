@@ -35,7 +35,6 @@ export default function EmployerModal({ isOpen, onClose, data }: ModalProps) {
   })
 
   const [companyList, setCompanyList] = React.useState<Employer.IEmployer[]>([])
-
   async function fetchCompanies() {
     const { data } = await api.get('company/')
     setCompanyList(data)
@@ -55,6 +54,7 @@ export default function EmployerModal({ isOpen, onClose, data }: ModalProps) {
     } catch (error) {
       console.log(error)
     }
+    onClose()
   }
 
   useEffect(() => {

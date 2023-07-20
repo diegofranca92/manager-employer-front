@@ -127,12 +127,6 @@ export default function CompanyTable({ head, data }: TableProps) {
                         <Typography
                           variant='small'
                           color='blue-gray'
-                          className='font-normal'>
-                          {company.name}
-                        </Typography>
-                        <Typography
-                          variant='small'
-                          color='blue-gray'
                           className='font-normal opacity-70'>
                           {company.site}
                         </Typography>
