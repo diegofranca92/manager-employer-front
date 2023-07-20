@@ -4,9 +4,7 @@ import NavBar from '../components/NavBar'
 import useAuth from '../hooks/useAuth'
 
 export const PrivateRoutes = () => {
-  // const { signed } = useAuth()
-
-  let signed = true
+  const { signed } = useAuth()
 
   return signed ? (
     <>

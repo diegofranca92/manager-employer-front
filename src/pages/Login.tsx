@@ -10,7 +10,6 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
 } = useForm<User.LoginFormData>({
     defaultValues: {
         username: "",
@@ -24,12 +23,13 @@ useEffect(() => {
 
 
   const onSubmit = async (payload: User.LoginFormData) => {
-    navigate('/home')
-    // try {
-    //   await signIn(payload)
-    // } catch (error) {
-    //   console.log(error)
-    // }
+    try {
+      const token = await signIn(payload)
+      console.log(token);
+      navigate('/home')
+    } catch (error) {
+      console.log(error)
+    }
   }
   if (!signed) {
     return (

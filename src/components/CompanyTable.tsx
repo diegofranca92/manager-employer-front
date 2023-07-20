@@ -9,9 +9,10 @@ import {
   IconButton,
   Tooltip
 } from '@material-tailwind/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import ConfimationAlert from './Alert'
 import CompanyModal from './CompanyModal'
+import api from '../services/api'
 // import { Pagination } from './Pagination'
 
 type TableProps = {
@@ -32,9 +33,9 @@ export default function CompanyTable({ head, data }: TableProps) {
     }
   }
 
-  const handleDelete = (data?: Company.ICompany) => {
+  const handleDelete = async (data?: Company.ICompany) => {
+    await api.delete(`company/${data?.id}/`)
     setOpenDelAlert(false)
-    console.log('Item deletado', data)
   }
 
   function handleOpenDelAlert(data: Company.ICompany) {
@@ -43,6 +44,20 @@ export default function CompanyTable({ head, data }: TableProps) {
       setCompanyItem(data)
     }
   }
+
+  const [companyList, setCompanyList] = React.useState<Company.ICompany[]>([])
+
+  async function fetchCompanies() {
+    const { data } = await api.get('company/')
+    setCompanyList(data)
+  }
+  useEffect(() => {
+    if (!open) {
+      fetchCompanies()
+      data = companyList
+    }
+  }, [])
+  
 
   return (
     <>

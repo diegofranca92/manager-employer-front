@@ -32,11 +32,12 @@ export default function CompanyModal({ isOpen, onClose, data }: ModalProps) {
   const onSubmit = async (payload: Company.ICompany) => {
     try {
       if (payload.id) {
-        await api.put('company/', payload)
+        await api.put(`company/${payload.id}/`, payload)
+      } else {
+        await api.post('company/', payload)
       }
 
-      await api.post('company/', payload)
-      await api.get('company/')
+      
     } catch (error) {
       console.log(error)
     }

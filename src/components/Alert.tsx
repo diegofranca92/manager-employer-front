@@ -13,7 +13,7 @@ import { XMarkIcon } from '@heroicons/react/24/solid'
 
 type AlertProps = {
   isOpen: boolean
-  data?: Employer.IEmployer
+  data?: Company.ICompany
   onClose: () => void
   onConfirm?: () => void
 }
@@ -24,7 +24,7 @@ export default function ConfimationAlert({
   onConfirm,
   data
 }: AlertProps) {
-  const [employerItem, setEmployerItem] = React.useState<Employer.IEmployer>()
+  const [employerItem, setEmployerItem] = React.useState<Company.ICompany>()
 
   useEffect(() => {
     console.log(data, 'ta aqui')
@@ -43,14 +43,14 @@ export default function ConfimationAlert({
         </div>
         <DialogBody divider>
           <Typography variant='md' color='blue-gray'>
-            Tem certeza que quer deletar {employerItem?.name}?
+            Tem certeza que quer deletar {employerItem?.name || ''}?
           </Typography>
         </DialogBody>
         <DialogFooter className='space-x-2 justify-between'>
           <Button variant='outlined' color='gray' onClick={onClose}>
             Cancelar
           </Button>
-          <Button variant='gradient' color='red' onClick={onConfirm ?? onClose}>
+          <Button variant='gradient' color='red' onClick={onConfirm}>
             Sim, exluir
           </Button>
         </DialogFooter>
