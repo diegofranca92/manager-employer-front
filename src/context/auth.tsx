@@ -1,69 +1,66 @@
 import { createContext, useEffect, useState } from 'react'
-// import { api } from '../services/api'
-// import { Navigate } from 'react-router-dom'
+import api from '@app/services/api'
+import { useNavigate } from 'react-router-dom'
 
-interface User {
-  id: number
-  name: string
-}
 interface ContextProps {
-  user?: User
+  user: User.IUser
   signed: boolean
+  signIn: (payload: User.LoginFormData) => Promise<void>
+  signOut: () => void
 }
-export const AuthContext = createContext<ContextProps>({
-  // user: { id: 1, name: 'Diego' },
-  signed: true
-})
+export const AuthContext = createContext<ContextProps>({} as ContextProps)
 
 export const AuthProvider = ({ children }: any) => {
-  const [user, setUser] = useState<User>()
+  const [user, setUser] = useState<User.IUser | null>(null)
+  const [storageUser, setStorageUser] = useState<string | null>(null)
+  const [accessToken, setAccessToken] = useState<string | null>(null)
+  const navigate = useNavigate()
+
+  const checkUserAuth = async () => {
+    setAccessToken(localStorage.getItem('@Auth:token'))
+    setStorageUser(localStorage.getItem('@Auth:user'))
+
+    if (accessToken && storageUser) {
+      setUser(JSON.parse(storageUser) as User.IUser)
+    }
+  }
 
   useEffect(() => {
-    // const checkUserAuth = async () => {
-    //   const storageUser = localStorage.getItem('@Auth:user')
-    //   const storageToken = localStorage.getItem('@Auth:token')
+    checkUserAuth()
+  }, [storageUser, accessToken])
 
-    //   if (storageToken && storageUser) {
-    //     setUser(storageUser)
-    //   }
-    // }
-
-    // checkUserAuth()
-    setUser({
-      id: 1,
-      name: 'Diego'
+  const signIn = async (payload: User.LoginFormData): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      api
+        .post(`/auth/login`, payload)
+        .then(res => res.data)
+        .then(res => {
+          localStorage.setItem('@Auth:token', res.data.token)
+          localStorage.setItem('@Auth:user', res.data.user)
+          api.defaults.headers.common[
+            'Authorization'
+          ] = `Bearer ${res.data.token}`
+          resolve(res)
+        })
+        .catch(err => {
+          reject(err)
+        })
     })
-  }, [])
+  }
 
-  // const signIn = async ({ email, password }) => {
-  //   const response = await api.post('auth', { email, password })
-
-  //   const { token, user, error } = response.data
-
-  //   if (error) {
-  //     alert(error)
-  //   } else {
-  //     const userData = JSON.stringify(user)
-  //     setUser(userData)
-  //     api.defaults.headers.common['Authorization'] = `Bearer ${token}`
-  //     localStorage.setItem('@Auth:token', token)
-  //     localStorage.setItem('@Auth:user', userData)
-  //   }
-  // }
-
-  // const signOut = () => {
-  //   localStorage.clear()
-  //   setUser(null)
-  //   return <Navigate to='/' />
-  // }
+  const signOut = async () => {
+    localStorage.clear()
+    setUser(null)
+    navigate('/')
+  }
 
   return (
     <AuthContext.Provider
       value={{
-        // user,
-        signed: !!user
-        // signIn,
-        // signOut
+        user,
+        signed: !!localStorage.getItem('@Auth:token'),
+        signIn,
+        signOut
       }}>
       {children}
     </AuthContext.Provider>
