@@ -36,9 +36,10 @@ export default function Table({ head, data }: TableProps) {
 
   const handleOpen = (data?: Employer.IEmployer) => {
     setOpen(!open)
+    setEmployerItem({} as Employer.IEmployer)
     if (data) {
       setEmployerItem(data)
-    }
+    } 
   }
 
   const handleDelete = (data?: Employer.IEmployer) => {
@@ -57,13 +58,13 @@ export default function Table({ head, data }: TableProps) {
     <>
       <Card className='h-full w-full'>
         <CardHeader floated={false} shadow={false} className='rounded-none'>
-          <div className='flex flex-col items-center justify-between gap-4 md:flex-row'>
-            <div className='w-full md:w-72'>
+          <div className='flex flex-col items-center justify-end gap-4 md:flex-row'>
+            {/* <div className='w-full md:w-72'>
               <Input
                 label='Search'
                 icon={<MagnifyingGlassIcon className='h-5 w-5' />}
               />
-            </div>
+            </div> */}
             <Button
               className='flex items-center gap-3'
               onClick={() => handleOpen()}
@@ -87,12 +88,12 @@ export default function Table({ head, data }: TableProps) {
                       color='blue-gray'
                       className='flex items-center justify-between gap-2 font-normal leading-none opacity-70'>
                       {head}{' '}
-                      {index !== head.length - 1 && (
+                      {/* {index !== head.length - 1 && (
                         <ChevronUpDownIcon
                           strokeWidth={2}
                           className='h-4 w-4'
                         />
-                      )}
+                      )} */}
                     </Typography>
                   </th>
                 ))}
