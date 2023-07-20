@@ -24,13 +24,28 @@ export function TimeLineItem({ data }: Props) {
             withBorder
           />
         </TimelineIcon>
-        <div className='flex flex-col gap-1'>
+        <div className='flex flex-col gap-1 text-left'>
           <Typography variant='h6' color='blue-gray'>
             {data.name}
           </Typography>
-          <Typography variant='small' color='gray' className='font-normal'>
-            {data.entry_date}
-          </Typography>
+          
+          {data.entry_date && (
+            <Typography variant='small' color='gray' className='font-normal'>
+              Entrou na {data.company.name} {data.entry_date}
+            </Typography>
+          )}
+
+          {data.exit_date && (
+            <Typography variant='small' color='gray' className='font-normal'>
+              Saiu da {data.company.name} {data.exit_date}
+            </Typography>
+          )}
+
+          {data.vacation_date && (
+            <Typography variant='small' color='gray' className='font-normal'>
+              Entrou de férias da {data.company.name} {data.vacation_date}
+            </Typography>
+          )}
         </div>
       </TimelineHeader>
     </TimelineItem>

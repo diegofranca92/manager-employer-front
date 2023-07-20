@@ -1,16 +1,12 @@
 import {
-  MagnifyingGlassIcon,
-  ChevronUpDownIcon
-} from '@heroicons/react/24/outline'
-import {
   PencilIcon,
   UserPlusIcon,
-  TrashIcon
+  TrashIcon,
+  UserGroupIcon
 } from '@heroicons/react/24/solid'
 import {
   Card,
   CardHeader,
-  Input,
   Typography,
   Button,
   CardBody,
@@ -19,8 +15,8 @@ import {
   Tooltip
 } from '@material-tailwind/react'
 import React from 'react'
-import Modal from './Modal'
 import ConfimationAlert from './Alert'
+import EmployerModal from './EmployerModal'
 // import { Pagination } from './Pagination'
 
 
@@ -29,7 +25,7 @@ type TableProps = {
   head: string[]
 }
 
-export default function Table({ head, data }: TableProps) {
+export default function EmployerTable({ head, data }: TableProps) {
   const [open, setOpen] = React.useState(false)
   const [openDelAlert, setOpenDelAlert] = React.useState(false)
   const [employerItem, setEmployerItem] = React.useState<Employer.IEmployer>()
@@ -58,19 +54,26 @@ export default function Table({ head, data }: TableProps) {
     <>
       <Card className='h-full w-full'>
         <CardHeader floated={false} shadow={false} className='rounded-none'>
-          <div className='flex flex-col items-center justify-end gap-4 md:flex-row'>
-            {/* <div className='w-full md:w-72'>
+          <div className='flex flex-col items-center justify-between gap-4 md:flex-row'>
+            {/* TODO
+            <div className='w-full md:w-72'>
               <Input
                 label='Search'
                 icon={<MagnifyingGlassIcon className='h-5 w-5' />}
               />
             </div> */}
+            <Typography
+              variant='h4'
+              color='blue-gray'
+              className='flex items-center justify-between gap-2 font-normal leading-none opacity-70'>
+              <UserGroupIcon strokeWidth={2} className='h-10 w-10' />Funcionários
+            </Typography>
             <Button
               className='flex items-center gap-3'
               onClick={() => handleOpen()}
               color='blue'
               size='sm'>
-              <UserPlusIcon strokeWidth={2} className='h-4 w-4' /> Novo
+               Novo
               funcionário
             </Button>
           </div>
@@ -79,7 +82,7 @@ export default function Table({ head, data }: TableProps) {
           <table className='mt-4 w-full min-w-max table-auto text-left'>
             <thead>
               <tr>
-                {head.map((head, index) => (
+                {head.map((head) => (
                   <th
                     key={head}
                     className='cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50'>
@@ -88,7 +91,8 @@ export default function Table({ head, data }: TableProps) {
                       color='blue-gray'
                       className='flex items-center justify-between gap-2 font-normal leading-none opacity-70'>
                       {head}{' '}
-                      {/* {index !== head.length - 1 && (
+                      {/* TODO
+                       {index !== head.length - 1 && (
                         <ChevronUpDownIcon
                           strokeWidth={2}
                           className='h-4 w-4'
@@ -110,7 +114,8 @@ export default function Table({ head, data }: TableProps) {
                   <tr key={employer.name}>
                     <td className={classes}>
                       <div className='flex items-center gap-3'>
-                        {/* <Avatar
+                        {/* TODO
+                        <Avatar
                           src={employer.img}
                           alt={employer.name}
                           size='sm'
@@ -173,7 +178,7 @@ export default function Table({ head, data }: TableProps) {
             </tbody>
           </table>
         </CardBody>
-        {/* <Pagination /> */}
+        {/* TODO <Pagination /> */}
       </Card>
       <ConfimationAlert
         isOpen={openDelAlert}
@@ -181,7 +186,7 @@ export default function Table({ head, data }: TableProps) {
         onConfirm={handleDelete}
         onClose={() => setOpenDelAlert(false)}
       />
-      <Modal isOpen={open} data={employerItem} onClose={handleOpen} />
+      <EmployerModal isOpen={open} data={employerItem} onClose={handleOpen} />
     </>
   )
 }

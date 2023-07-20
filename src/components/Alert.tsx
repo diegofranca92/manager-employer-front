@@ -10,7 +10,7 @@ import {
   // Textarea
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
-import { IEmployer } from './Table'
+import { IEmployer } from './EmployerTable'
 
 type AlertProps = {
   isOpen: boolean

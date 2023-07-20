@@ -1,18 +1,22 @@
-import Table from '../components/Table'
 import CardDash from '../components/CardDash'
 import api from '../services/api'
 import React, { useEffect } from 'react'
+import EmployerTable from '../components/EmployerTable'
+import CompanyTable from '../components/CompanyTable'
+import { Typography } from '@material-tailwind/react'
 export default function Home() {
-
-  const tableHeader = ['Funcionário', 'Função', 'Entrada', 'Ações']
-  const [employerList, setEmployerList] = React.useState<Employer.IEmployer[]>([])
-  const [companyList, setCompanyList] = React.useState<Employer.IEmployer[]>([])
+  const tableCompanyHeader = ['Nome', 'Site', 'Ações']
+  const tableEmployerHeader = ['Nome', 'Função', 'Entrada', 'Ações']
+  const [employerList, setEmployerList] = React.useState<Employer.IEmployer[]>(
+    []
+  )
+  const [companyList, setCompanyList] = React.useState<Company.ICompany[]>([])
 
   async function fetchEmployers() {
     const { data } = await api.get('employer/')
     setEmployerList(data)
   }
-  
+
   async function fetchCompanies() {
     const { data } = await api.get('company/')
     setCompanyList(data)
@@ -24,18 +28,27 @@ export default function Home() {
   }, [])
 
   return (
-    <>
-      <div className='min-h-full'>
-        <main>
-          <div className='mx-auto max-w-7xl py-6 sm:px-6 lg:px-8 flex gap-4'>
-            <CardDash title='Empresas' value={companyList.length} />
-            <CardDash title='Funcionarios' value={employerList?.length} />
+    <div className='min-h-full my-16 max-w-screen-xl mx-auto'>
+      <article className='mb-12'>
+        <Typography
+          variant='h4'
+          className='mr-4 ml-2  py-1.5 font-medium font-bold'>
+          Seja bem vind@!
+        </Typography>
+        <Typography className='mr-4 ml-2 py-1.5'>
+         Gerenciador muito útil, com Cadastro de Empresas e Funcionários 😎
+        </Typography>
+      </article>
+      <main>
+        <div className='flex justify-between gap-20 flex-wrap'>
+          <div className='flex-1 w-32'>
+            <CompanyTable data={companyList} head={tableCompanyHeader} />
           </div>
-          <div className='mx-auto max-w-screen-xl'>
-          <Table data={employerList} head={tableHeader} />
+          <div className='flex-1 w-64'>
+            <EmployerTable data={employerList} head={tableEmployerHeader} />
           </div>
-        </main>
-      </div>
-    </>
+        </div>
+      </main>
+    </div>
   )
 }

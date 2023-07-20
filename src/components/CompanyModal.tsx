@@ -5,9 +5,7 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
-  Input,
-  Select,
-  Option
+  Input
   // Textarea
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
@@ -16,42 +14,28 @@ import api from '../services/api'
 
 type ModalProps = {
   isOpen: boolean
-  data?: Employer.IEmployer
+  data?: Company.ICompany
   onClose: () => void
   onConfirm?: () => void
 }
 
-export default function Modal({ isOpen, onClose, data }: ModalProps) {
-  const { register, reset, handleSubmit, getValues } = useForm<Employer.IEmployer>({
+export default function CompanyModal({ isOpen, onClose, data }: ModalProps) {
+  const { register, reset, handleSubmit, getValues } = useForm<Company.ICompany>({
     defaultValues: {
       id: 0,
       name: '',
-      position: '',
-      entry_date: '',
-      company: {
-        name: ''
-      }
+      site: ''
     }
   })
 
-  const [companyList, setCompanyList] = React.useState<Employer.IEmployer[]>([])
 
-  async function fetchCompanies() {
-    const { data } = await api.get('company/')
-    setCompanyList(data)
-  }
-
-  useEffect(() => {
-    fetchCompanies()
-  }, [])
-
-  const onSubmit = async (payload: Employer.IEmployer) => {
+  const onSubmit = async (payload: Company.ICompany) => {
     try {
       if (payload.id) {
-        await api.put('employer/', payload)
+        await api.put('company/', payload)
       }
 
-      await api.post('employer/', payload)
+      await api.post('company/', payload)
     } catch (error) {
       console.log(error)
     }
@@ -65,23 +49,13 @@ export default function Modal({ isOpen, onClose, data }: ModalProps) {
     <React.Fragment>
       <Dialog open={isOpen} size='xs' handler={onClose}>
         <div className='flex items-center justify-between hover:cursor-pointer'>
-          <DialogHeader>Cadastro de Funcionário</DialogHeader>
+          <DialogHeader>Cadastro de Empresa</DialogHeader>
           <XMarkIcon className='mr-3 h-5 w-5' onClick={onClose} />
         </div>
         <DialogBody divider>
           <div className='flex flex-col gap-6'>
             <Input color='blue' label='Nome' {...register('name')} />
-            <Input color='blue' label='Função' {...register('position')} />
-            <Select label={ getValues('company.name') ? '' : 'Selecione a empresa'} selected={() => getValues('company.name')}>
-              {companyList.map(company => (
-                <Option {...register('company.name')} key={company.id}>{company.name}</Option>
-              ))}
-            </Select>
-            <Input
-              color='blue'
-              label='Data de admissão'
-              {...register('entry_date')}
-            />
+            <Input color='blue' label='Site' {...register('site')} />
           </div>
         </DialogBody>
         <DialogFooter className='space-x-2 justify-between'>
