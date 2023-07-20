@@ -2,10 +2,11 @@ import useAuth from '../hooks/useAuth'
 import { Card, Input, Button, Typography } from '@material-tailwind/react'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 
 export default function Login() {
   const { signIn, signed } = useAuth()
+  const navigate = useNavigate()
   const {
     register,
     handleSubmit,
@@ -23,11 +24,12 @@ useEffect(() => {
 
 
   const onSubmit = async (payload: User.LoginFormData) => {
-    try {
-      await signIn(payload)
-    } catch (error) {
-      console.log(error)
-    }
+    navigate('/home')
+    // try {
+    //   await signIn(payload)
+    // } catch (error) {
+    //   console.log(error)
+    // }
   }
   if (!signed) {
     return (

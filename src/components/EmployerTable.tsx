@@ -17,6 +17,7 @@ import {
 import React from 'react'
 import ConfimationAlert from './Alert'
 import EmployerModal from './EmployerModal'
+import api from '../services/api'
 // import { Pagination } from './Pagination'
 
 
@@ -38,9 +39,14 @@ export default function EmployerTable({ head, data }: TableProps) {
     } 
   }
 
-  const handleDelete = (data?: Employer.IEmployer) => {
-    setOpenDelAlert(false)
-    console.log('Item deletado', data)
+  const handleDelete = async (data?: Employer.IEmployer) => {
+    try {
+      await api.delete(`employer/${data?.id}/`)
+      setOpenDelAlert(false)
+    } catch (error) {
+      console.log(error);
+    }
+    
   }
 
   function handleOpenDelAlert(data: Employer.IEmployer) {

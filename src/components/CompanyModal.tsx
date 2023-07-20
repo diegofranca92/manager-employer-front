@@ -36,6 +36,7 @@ export default function CompanyModal({ isOpen, onClose, data }: ModalProps) {
       }
 
       await api.post('company/', payload)
+      await api.get('company/')
     } catch (error) {
       console.log(error)
     }

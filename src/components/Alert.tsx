@@ -10,11 +10,10 @@ import {
   // Textarea
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
-import { IEmployer } from './EmployerTable'
 
 type AlertProps = {
   isOpen: boolean
-  data?: IEmployer
+  data?: Employer.IEmployer
   onClose: () => void
   onConfirm?: () => void
 }
@@ -25,7 +24,7 @@ export default function ConfimationAlert({
   onConfirm,
   data
 }: AlertProps) {
-  const [employerItem, setEmployerItem] = React.useState<IEmployer>()
+  const [employerItem, setEmployerItem] = React.useState<Employer.IEmployer>()
 
   useEffect(() => {
     console.log(data, 'ta aqui')

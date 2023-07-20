@@ -58,7 +58,7 @@ function ProfileMenu() {
 
   function handleLogout() {
     closeMenu()
-    signOut()
+    // signOut()
     navigate('/')
     console.log('Saindo...')
   }

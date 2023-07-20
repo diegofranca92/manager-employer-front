@@ -11,7 +11,7 @@ import {
   // Textarea
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import api from '../services/api'
 
 type ModalProps = {
@@ -22,17 +22,18 @@ type ModalProps = {
 }
 
 export default function EmployerModal({ isOpen, onClose, data }: ModalProps) {
-  const { register, reset, handleSubmit, getValues } = useForm<Employer.IEmployer>({
-    defaultValues: {
-      id: 0,
-      name: '',
-      position: '',
-      entry_date: '',
-      company: {
-        name: ''
+  const { register, reset, handleSubmit, control } =
+    useForm<Employer.IEmployer>({
+      defaultValues: {
+        id: 0,
+        name: '',
+        position: '',
+        entry_date: '',
+        company: {
+          name: ''
+        }
       }
-    }
-  })
+    })
 
   const [companyList, setCompanyList] = React.useState<Employer.IEmployer[]>([])
   async function fetchCompanies() {
@@ -72,11 +73,18 @@ export default function EmployerModal({ isOpen, onClose, data }: ModalProps) {
           <div className='flex flex-col gap-6'>
             <Input color='blue' label='Nome' {...register('name')} />
             <Input color='blue' label='Função' {...register('position')} />
-            <Select label={ getValues('company.name') ? '' : 'Selecione a empresa'} selected={() => getValues('company.name')}>
-              {companyList.map(company => (
-                <Option {...register('company.name')} key={company.id}>{company.name}</Option>
-              ))}
-            </Select>
+            <Controller
+              name='company.name'
+              control={control}
+              render={({ field }) => (
+                <Select {...field} onSelect={() => data?.company.name} label={'Selecione a empresa'}>
+                  {companyList.map(company => (
+                    <Option key={company.id}>{company.name}</Option>
+                  ))}
+                </Select>
+              )}
+            />
+
             <Input
               color='blue'
               label='Data de admissão'

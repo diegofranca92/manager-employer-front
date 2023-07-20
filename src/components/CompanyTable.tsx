@@ -22,13 +22,13 @@ type TableProps = {
 export default function CompanyTable({ head, data }: TableProps) {
   const [open, setOpen] = React.useState(false)
   const [openDelAlert, setOpenDelAlert] = React.useState(false)
-  const [companyItem, setEmployerItem] = React.useState<Company.ICompany>()
+  const [companyItem, setCompanyItem] = React.useState<Company.ICompany>()
 
   const handleOpen = (data?: Company.ICompany) => {
     setOpen(!open)
-    setEmployerItem({} as Company.ICompany)
+    setCompanyItem({} as Company.ICompany)
     if (data) {
-      setEmployerItem(data)
+      setCompanyItem(data)
     }
   }
 
@@ -40,7 +40,7 @@ export default function CompanyTable({ head, data }: TableProps) {
   function handleOpenDelAlert(data: Company.ICompany) {
     setOpenDelAlert(!openDelAlert)
     if (data) {
-      setEmployerItem(data)
+      setCompanyItem(data)
     }
   }
 
@@ -161,7 +161,7 @@ export default function CompanyTable({ head, data }: TableProps) {
       <ConfimationAlert
         isOpen={openDelAlert}
         data={companyItem}
-        onConfirm={handleDelete}
+        onConfirm={() => handleDelete(companyItem)}
         onClose={() => setOpenDelAlert(false)}
       />
       <CompanyModal isOpen={open} data={companyItem} onClose={handleOpen} />
