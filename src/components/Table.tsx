@@ -5,8 +5,6 @@ import {
 import {
   PencilIcon,
   UserPlusIcon,
-  ArrowRightIcon,
-  ArrowLeftIcon,
   TrashIcon
 } from '@heroicons/react/24/solid'
 import {
@@ -16,141 +14,45 @@ import {
   Typography,
   Button,
   CardBody,
-  Chip,
-  CardFooter,
-  // Tabs,
-  // TabsHeader,
-  // Tab,
-  Avatar,
+  // Avatar,
   IconButton,
   Tooltip
 } from '@material-tailwind/react'
 import React from 'react'
 import Modal from './Modal'
 import ConfimationAlert from './Alert'
+// import { Pagination } from './Pagination'
 
-// const TABS = [
-//   {
-//     label: 'All',
-//     value: 'all'
-//   },
-//   {
-//     label: 'Monitored',
-//     value: 'monitored'
-//   },
-//   {
-//     label: 'Unmonitored',
-//     value: 'unmonitored'
-//   }
-// ]
 
-export interface IEmployer {
-  img: string
-  name: string
-  email: string
-  job: string
-  org: string
-  online: boolean
-  date: string
+type TableProps = {
+  data: Employer.IEmployer[]
+  head: string[]
 }
 
-const TABLE_HEAD = ['Member', 'Function', 'Status', 'Employed', '']
-
-const TABLE_ROWS = [
-  {
-    img: 'https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg',
-    name: 'John Michael',
-    email: 'john@creative-tim.com',
-    job: 'Manager',
-    org: 'Organization',
-    online: true,
-    date: '23/04/18'
-  },
-  {
-    img: 'https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg',
-    name: 'Alexa Liras',
-    email: 'alexa@creative-tim.com',
-    job: 'Programator',
-    org: 'Developer',
-    online: false,
-    date: '23/04/18'
-  },
-  {
-    img: 'https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-1.jpg',
-    name: 'Laurent Perrier',
-    email: 'laurent@creative-tim.com',
-    job: 'Executive',
-    org: 'Projects',
-    online: false,
-    date: '19/09/17'
-  },
-  {
-    img: 'https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-4.jpg',
-    name: 'Michael Levi',
-    email: 'michael@creative-tim.com',
-    job: 'Programator',
-    org: 'Developer',
-    online: true,
-    date: '24/12/08'
-  },
-  {
-    img: 'https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-5.jpg',
-    name: 'Richard Gran',
-    email: 'richard@creative-tim.com',
-    job: 'Manager',
-    org: 'Executive',
-    online: false,
-    date: '04/10/21'
-  }
-]
-
-export default function Table() {
+export default function Table({ head, data }: TableProps) {
   const [open, setOpen] = React.useState(false)
   const [openDelAlert, setOpenDelAlert] = React.useState(false)
-  const [employerItem, setEmployerItem] = React.useState<IEmployer>()
+  const [employerItem, setEmployerItem] = React.useState<Employer.IEmployer>()
 
-  const handleOpen = (data?: IEmployer) => {
+  const handleOpen = (data?: Employer.IEmployer) => {
     setOpen(!open)
     if (data) {
       setEmployerItem(data)
     }
   }
 
-  const handleDelete = (data?: IEmployer) => {
+  const handleDelete = (data?: Employer.IEmployer) => {
     setOpenDelAlert(false)
     console.log('Item deletado', data)
   }
 
-  function handleOpenDelAlert(data: IEmployer) {
+  function handleOpenDelAlert(data: Employer.IEmployer) {
     setOpenDelAlert(!openDelAlert)
     if (data) {
       setEmployerItem(data)
     }
-    
-  }
+  } 
 
-
-  const [active, setActive] = React.useState(1)
-
-  const getItemProps = (index: number) =>
-    ({
-      variant: active === index ? 'filled' : 'text',
-      color: active === index ? 'blue' : 'blue-gray',
-      onClick: () => setActive(index),
-      className: 'rounded-full'
-    } as any)
-
-  const next = () => {
-    if (active === 5) return
-
-    setActive(active + 1)
-  }
-
-  const prev = () => {
-    if (active === 1) return
-
-    setActive(active - 1)
-  }
   return (
     <>
       <Card className='h-full w-full'>
@@ -172,11 +74,11 @@ export default function Table() {
             </Button>
           </div>
         </CardHeader>
-        <CardBody className='overflow-scroll px-0'>
+        <CardBody className='md:overflow-auto overflow-scroll px-0'>
           <table className='mt-4 w-full min-w-max table-auto text-left'>
             <thead>
               <tr>
-                {TABLE_HEAD.map((head, index) => (
+                {head.map((head, index) => (
                   <th
                     key={head}
                     className='cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50'>
@@ -185,7 +87,7 @@ export default function Table() {
                       color='blue-gray'
                       className='flex items-center justify-between gap-2 font-normal leading-none opacity-70'>
                       {head}{' '}
-                      {index !== TABLE_HEAD.length - 1 && (
+                      {index !== head.length - 1 && (
                         <ChevronUpDownIcon
                           strokeWidth={2}
                           className='h-4 w-4'
@@ -197,8 +99,8 @@ export default function Table() {
               </tr>
             </thead>
             <tbody>
-              {TABLE_ROWS.map((employer, index) => {
-                const isLast = index === TABLE_ROWS.length - 1
+              {data?.map((employer, index) => {
+                const isLast = index === data.length - 1
                 const classes = isLast
                   ? 'p-4'
                   : 'p-4 border-b border-blue-gray-50'
@@ -207,23 +109,17 @@ export default function Table() {
                   <tr key={employer.name}>
                     <td className={classes}>
                       <div className='flex items-center gap-3'>
-                        <Avatar
+                        {/* <Avatar
                           src={employer.img}
                           alt={employer.name}
                           size='sm'
-                        />
+                        /> */}
                         <div className='flex flex-col'>
                           <Typography
                             variant='small'
                             color='blue-gray'
                             className='font-normal'>
                             {employer.name}
-                          </Typography>
-                          <Typography
-                            variant='small'
-                            color='blue-gray'
-                            className='font-normal opacity-70'>
-                            {employer.email}
                           </Typography>
                         </div>
                       </div>
@@ -234,24 +130,14 @@ export default function Table() {
                           variant='small'
                           color='blue-gray'
                           className='font-normal'>
-                          {employer.job}
+                          {employer.position}
                         </Typography>
                         <Typography
                           variant='small'
                           color='blue-gray'
                           className='font-normal opacity-70'>
-                          {employer.org}
+                          {employer.company.name}
                         </Typography>
-                      </div>
-                    </td>
-                    <td className={classes}>
-                      <div className='w-max'>
-                        <Chip
-                          variant='ghost'
-                          size='sm'
-                          value={employer.online ? 'online' : 'offline'}
-                          color={employer.online ? 'green' : 'blue-gray'}
-                        />
                       </div>
                     </td>
                     <td className={classes}>
@@ -259,7 +145,7 @@ export default function Table() {
                         variant='small'
                         color='blue-gray'
                         className='font-normal'>
-                        {employer.date}
+                        {employer.entry_date}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -286,36 +172,14 @@ export default function Table() {
             </tbody>
           </table>
         </CardBody>
-        <CardFooter className='flex items-center justify-center border-t border-blue-gray-50 p-4'>
-          <div className='flex items-center gap-4'>
-            <Button
-              variant='text'
-              color='blue-gray'
-              className='flex items-center gap-2 rounded-full'
-              onClick={prev}
-              disabled={active === 1}>
-              <ArrowLeftIcon strokeWidth={2} className='h-4 w-4' /> Previous
-            </Button>
-            <div className='flex items-center gap-2'>
-              <IconButton {...getItemProps(1)}>1</IconButton>
-              <IconButton {...getItemProps(2)}>2</IconButton>
-              <IconButton {...getItemProps(3)}>3</IconButton>
-              <IconButton {...getItemProps(4)}>4</IconButton>
-              <IconButton {...getItemProps(5)}>5</IconButton>
-            </div>
-            <Button
-              variant='text'
-              color='blue-gray'
-              className='flex items-center gap-2 rounded-full'
-              onClick={next}
-              disabled={active === 5}>
-              Next
-              <ArrowRightIcon strokeWidth={2} className='h-4 w-4' />
-            </Button>
-          </div>
-        </CardFooter>
+        {/* <Pagination /> */}
       </Card>
-      <ConfimationAlert isOpen={openDelAlert} data={employerItem} onConfirm={handleDelete} onClose={() => setOpenDelAlert(false)}/>
+      <ConfimationAlert
+        isOpen={openDelAlert}
+        data={employerItem}
+        onConfirm={handleDelete}
+        onClose={() => setOpenDelAlert(false)}
+      />
       <Modal isOpen={open} data={employerItem} onClose={handleOpen} />
     </>
   )

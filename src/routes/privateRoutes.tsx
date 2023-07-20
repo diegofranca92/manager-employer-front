@@ -1,10 +1,12 @@
-import { useContext } from 'react'
-import { AuthContext } from '../context/auth'
+
 import { Navigate, Outlet } from 'react-router-dom'
 import NavBar from '../components/NavBar'
+import useAuth from '../hooks/useAuth'
 
 export const PrivateRoutes = () => {
-  const { signed } = useContext(AuthContext)
+  // const { signed } = useAuth()
+
+  let signed = true
 
   return signed ? (
     <>

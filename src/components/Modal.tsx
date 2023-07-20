@@ -5,15 +5,16 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
-  Input,
+  Input
   // Textarea
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
-import { IEmployer } from './Table'
+import { useForm } from 'react-hook-form'
+import api from '../services/api'
 
 type ModalProps = {
   isOpen: boolean
-  data?: IEmployer
+  data?: Employer.IEmployer
   onClose: () => void
   onConfirm?: () => void
 }
@@ -21,17 +22,38 @@ type ModalProps = {
 export default function Modal({
   isOpen,
   onClose,
-  onConfirm,
   data
 }: ModalProps) {
-  const [employerItem, setEmployerItem] = React.useState<IEmployer>()
+  const {
+    register,
+    reset,
+    handleSubmit,
+  } = useForm<Employer.IEmployer>({
+    defaultValues: {
+      name: '',
+      position: '',
+      entry_date: '',
+      company: {
+        name: ''
+      }
+    }
+  })
+
+  const onSubmit = async (payload: Employer.IEmployer) => {
+    try {
+      if (payload.id) {
+        await api.put('employer/', payload)
+      }
+
+      await api.post('employer/', payload)
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 
   useEffect(() => {
-    console.log(data, 'ta aqui')
-
-    if (data) {
-      setEmployerItem(data)
-    }
+    reset(data)
   }, [data])
 
   return (
@@ -43,13 +65,13 @@ export default function Modal({
         </div>
         <DialogBody divider>
           <div className='flex flex-col gap-6'>
-            <Input color='blue' label='Nome' value={employerItem?.name} />
-            <Input color='blue' label='Função' value={employerItem?.job} />
-            <Input color='blue' label='Email' value={employerItem?.email} />
+            <Input color='blue' label='Nome' {...register('name')} />
+            <Input color='blue' label='Função' {...register('position')} />
+            <Input color='blue' label='Empresa' {...register('company.name')} />
             <Input
               color='blue'
               label='Data de admissão'
-              value={employerItem?.date}
+              {...register('entry_date')}
             />
           </div>
         </DialogBody>
@@ -60,7 +82,7 @@ export default function Modal({
           <Button
             variant='gradient'
             color='blue'
-            onClick={onConfirm ?? onClose}>
+            onClick={handleSubmit(onSubmit)}>
             Salvar
           </Button>
         </DialogFooter>

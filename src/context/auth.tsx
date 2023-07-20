@@ -1,9 +1,9 @@
 import { createContext, useEffect, useState } from 'react'
-import api from '@app/services/api'
+import api from '../services/api'
 import { useNavigate } from 'react-router-dom'
 
 interface ContextProps {
-  user: User.IUser
+  // user: User.IUser
   signed: boolean
   signIn: (payload: User.LoginFormData) => Promise<void>
   signOut: () => void
@@ -11,7 +11,7 @@ interface ContextProps {
 export const AuthContext = createContext<ContextProps>({} as ContextProps)
 
 export const AuthProvider = ({ children }: any) => {
-  const [user, setUser] = useState<User.IUser | null>(null)
+  // const [user, setUser] = useState<User.IUser | null>(null)
   const [storageUser, setStorageUser] = useState<string | null>(null)
   const [accessToken, setAccessToken] = useState<string | null>(null)
   const navigate = useNavigate()
@@ -20,9 +20,9 @@ export const AuthProvider = ({ children }: any) => {
     setAccessToken(localStorage.getItem('@Auth:token'))
     setStorageUser(localStorage.getItem('@Auth:user'))
 
-    if (accessToken && storageUser) {
-      setUser(JSON.parse(storageUser) as User.IUser)
-    }
+    // if (accessToken && storageUser) {
+    //   setUser(JSON.parse(storageUser) as User.IUser)
+    // }
   }
 
   useEffect(() => {
@@ -50,15 +50,16 @@ export const AuthProvider = ({ children }: any) => {
 
   const signOut = async () => {
     localStorage.clear()
-    setUser(null)
+    // setUser(null)
     navigate('/')
   }
 
   return (
     <AuthContext.Provider
       value={{
-        user,
-        signed: !!localStorage.getItem('@Auth:token'),
+        // user,
+        signed: true,
+        // signed: !!localStorage.getItem('@Auth:token'),
         signIn,
         signOut
       }}>

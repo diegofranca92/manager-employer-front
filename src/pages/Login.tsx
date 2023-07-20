@@ -1,5 +1,6 @@
-import useAuth from '@app/hooks/useAuth'
+import useAuth from '../hooks/useAuth'
 import { Card, Input, Button, Typography } from '@material-tailwind/react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Navigate } from 'react-router-dom'
 
@@ -15,6 +16,11 @@ export default function Login() {
         password: "",
     }
 })
+
+useEffect(() => {
+  console.log('signed', signed);
+}, [])
+
 
   const onSubmit = async (payload: User.LoginFormData) => {
     try {

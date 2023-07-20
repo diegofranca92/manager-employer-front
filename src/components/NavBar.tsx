@@ -21,37 +21,40 @@ import {
 } from '@heroicons/react/24/outline'
 import imgPerfil from '../assets/perfil.jpg'
 import { useNavigate } from 'react-router-dom'
-// profile menu component
-const profileMenuItems = [
-  // {
-  //   label: "My Profile",
-  //   icon: UserCircleIcon,
-  // },
-  // {
-  //   label: "Edit Profile",
-  //   icon: Cog6ToothIcon,
-  // },
-  // {
-  //   label: "Inbox",
-  //   icon: InboxArrowDownIcon,
-  // },
-  // {
-  //   label: "Help",
-  //   icon: LifebuoyIcon,
-  // },
-  {
-    label: 'Sign Out',
-    icon: PowerIcon
-  }
-]
+import useAuth from '../hooks/useAuth'
 
 function ProfileMenu() {
+  const { signOut } = useAuth()
   const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+  const profileMenuItems = [
+    // {
+    //   label: "My Profile",
+    //   icon: UserCircleIcon,
+    // },
+    // {
+    //   label: "Edit Profile",
+    //   icon: Cog6ToothIcon,
+    // },
+    // {
+    //   label: "Inbox",
+    //   icon: InboxArrowDownIcon,
+    // },
+    // {
+    //   label: "Help",
+    //   icon: LifebuoyIcon,
+    // },
+    {
+      label: 'Sair',
+      icon: PowerIcon
+    }
+  ]
+
   const closeMenu = () => setIsMenuOpen(false)
 
   function handleLogout() {
     closeMenu()
+    signOut()
     navigate('/')
     console.log('Saindo...')
   }
