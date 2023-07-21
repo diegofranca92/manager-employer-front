@@ -5,15 +5,13 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
-  Input,
   Typography
-  // Textarea
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 
 type AlertProps = {
   isOpen: boolean
-  data?: Company.ICompany
+  data?: Employer.IEmployer
   onClose: () => void
   onConfirm?: () => void
 }
@@ -24,7 +22,7 @@ export default function ConfimationAlert({
   onConfirm,
   data
 }: AlertProps) {
-  const [employerItem, setEmployerItem] = React.useState<Company.ICompany>()
+  const [employerItem, setEmployerItem] = React.useState<Employer.IEmployer>()
 
   useEffect(() => {
     console.log(data, 'ta aqui')
@@ -43,7 +41,8 @@ export default function ConfimationAlert({
         </div>
         <DialogBody divider>
           <Typography variant='md' color='blue-gray'>
-            Tem certeza que quer deletar {employerItem?.name || ''}?
+            Tem certeza que quer deletar{' '}
+            <span className='font-bold'>{employerItem?.name}</span>?
           </Typography>
         </DialogBody>
         <DialogFooter className='space-x-2 justify-between'>

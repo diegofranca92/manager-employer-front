@@ -3,7 +3,7 @@ import api from '../services/api'
 import { Navigate } from 'react-router-dom'
 
 interface ContextProps {
-  // user: User.IUser
+  user: any
   signed: boolean
   signIn: (payload: User.LoginFormData) => Promise<void>
   signOut: () => void
@@ -19,9 +19,9 @@ export const AuthProvider = ({ children }: any) => {
       // const storageUser = localStorage.getItem('@Auth:user')
       const storageToken = localStorage.getItem('@Auth:token')
       
-      // if (storageToken && storageUser) {
-      //   setUser(storageUser)
-      // }
+      if (storageToken) {
+        setUser(storageToken)
+      }
     }
 
     checkUserAuth()
@@ -31,7 +31,7 @@ export const AuthProvider = ({ children }: any) => {
     try {
       const {data} = await api.post('token/', payload)
       // const userData = JSON.stringify(user)
-      // setUser(userData)
+      setUser(data)
       api.defaults.headers.common['Authorization'] = `Bearer ${data.access}`
       localStorage.setItem('@Auth:token', data.access)
       // localStorage.setItem('@Auth:user', userData)
@@ -51,9 +51,8 @@ export const AuthProvider = ({ children }: any) => {
   return (
     <AuthContext.Provider
       value={{
-        // user,
-        // signed: !!user,
-        signed: !!localStorage.getItem('@Auth:token'),
+        user,
+        signed: !!user,
         signIn,
         signOut
       }}>

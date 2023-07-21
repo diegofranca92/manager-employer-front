@@ -12,7 +12,7 @@ import {
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import { Controller, useForm } from 'react-hook-form'
-import api from '../services/api'
+import api from '../../../services/api'
 
 type ModalProps = {
   isOpen: boolean
@@ -22,16 +22,14 @@ type ModalProps = {
 }
 
 export default function EmployerModal({ isOpen, onClose, data }: ModalProps) {
-  const { register, reset, handleSubmit, control } =
+  const { register, reset, handleSubmit, getValues, setValue, control } =
     useForm<Employer.IEmployer>({
       defaultValues: {
         id: 0,
         name: '',
         position: '',
         entry_date: '',
-        company: {
-          name: ''
-        }
+        company: {}
       }
     })
 
@@ -46,12 +44,12 @@ export default function EmployerModal({ isOpen, onClose, data }: ModalProps) {
   }, [])
 
   const onSubmit = async (payload: Employer.IEmployer) => {
+    payload.company = Number(payload.company) as never
+    
     try {
       if (payload.id) {
-        await api.put('employer/', payload)
-      }
-
-      await api.post('employer/', payload)
+        await api.put(`employer/${payload.id}/`, payload)
+      } else await api.post('employer/', payload)
     } catch (error) {
       console.log(error)
     }
@@ -74,16 +72,22 @@ export default function EmployerModal({ isOpen, onClose, data }: ModalProps) {
             <Input color='blue' label='Nome' {...register('name')} />
             <Input color='blue' label='Função' {...register('position')} />
             <Controller
-              name='company.name'
+              name='company'
               control={control}
               render={({ field }) => (
-                <Select {...field} onSelect={() => data?.company.name} label={'Selecione a empresa'}>
-                  {companyList.map(company => (
-                    <Option key={company.id}>{company.name}</Option>
-                  ))}
+                <Select {...field} label={'Selecione a empresa'}>
+                  {companyList.map(company => {                                       
+                   return <Option key={company.id} value={company.id?.toString()}>{company.name}</Option>
+              })}
                 </Select>
               )}
             />
+
+              {/* <Select {...register('company.id')} onChange={e => setValue('company.id', e)} label={'Selecione a empresa'}>
+                  {companyList.map(company => {                    
+                   return <Option key={company.id} value={company.id}>{company.name}</Option>
+              })}
+                </Select> */}
 
             <Input
               color='blue'

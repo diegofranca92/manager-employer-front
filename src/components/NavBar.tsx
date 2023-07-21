@@ -8,46 +8,23 @@ import {
   MenuList,
   MenuItem,
   Avatar,
-  MobileNav,
-  IconButton
+  IconButton,
+  Collapse
 } from '@material-tailwind/react'
 import {
   ChevronDownIcon,
-  // UserCircleIcon,
-  // Cog6ToothIcon,
-  // InboxArrowDownIcon,
-  // LifebuoyIcon,
   Bars3Icon,
   Bars3BottomLeftIcon,
   HomeIcon,
   PowerIcon,
-  Bars2Icon
 } from '@heroicons/react/24/outline'
 import imgPerfil from '../assets/perfil.jpg'
-import { useNavigate } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 
 function ProfileMenu() {
   const { signOut } = useAuth()
-  const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = React.useState(false)
   const profileMenuItems = [
-    // {
-    //   label: "My Profile",
-    //   icon: UserCircleIcon,
-    // },
-    // {
-    //   label: "Edit Profile",
-    //   icon: Cog6ToothIcon,
-    // },
-    // {
-    //   label: "Inbox",
-    //   icon: InboxArrowDownIcon,
-    // },
-    // {
-    //   label: "Help",
-    //   icon: LifebuoyIcon,
-    // },
     {
       label: 'Sair',
       icon: PowerIcon
@@ -59,8 +36,6 @@ function ProfileMenu() {
   function handleLogout() {
     closeMenu()
     signOut()
-    navigate('/')
-    console.log('Saindo...')
   }
 
   return (
@@ -163,7 +138,7 @@ export default function NavBar() {
         <Typography
           as='a'
           href='#'
-          className='mr-4 ml-2 cursor-pointer py-1.5 font-medium font-bold'>
+          className='mr-4 ml-2 cursor-pointer py-1.5 font-bold'>
           Employer manager
         </Typography>
         <div className='absolute top-2/4 left-2/4 hidden -translate-x-2/4 -translate-y-2/4 lg:block'>
@@ -179,9 +154,9 @@ export default function NavBar() {
         </IconButton>
         <ProfileMenu />
       </div>
-        <MobileNav open={isNavOpen} className='overflow-scroll'>
+        <Collapse open={isNavOpen} className='overflow-scroll'>
           <NavList />
-        </MobileNav>
+        </Collapse>
     </Navbar>
   )
 }

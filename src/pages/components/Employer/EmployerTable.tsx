@@ -1,4 +1,9 @@
-import { PencilIcon, TrashIcon, BuildingOffice2Icon } from '@heroicons/react/24/solid'
+import {
+  PencilIcon,
+  UserPlusIcon,
+  TrashIcon,
+  UserGroupIcon
+} from '@heroicons/react/24/solid'
 import {
   Card,
   CardHeader,
@@ -9,55 +14,47 @@ import {
   IconButton,
   Tooltip
 } from '@material-tailwind/react'
-import React, { useEffect } from 'react'
+import React from 'react'
 import ConfimationAlert from './Alert'
-import CompanyModal from './CompanyModal'
-import api from '../services/api'
+import EmployerModal from './EmployerModal'
+import api from '../../../services/api'
 // import { Pagination } from './Pagination'
 
+
 type TableProps = {
-  data: Company.ICompany[]
+  data: Employer.IEmployer[]
   head: string[]
 }
 
-export default function CompanyTable({ head, data }: TableProps) {
+export default function EmployerTable({ head, data }: TableProps) {
   const [open, setOpen] = React.useState(false)
   const [openDelAlert, setOpenDelAlert] = React.useState(false)
-  const [companyItem, setCompanyItem] = React.useState<Company.ICompany>()
+  const [employerItem, setEmployerItem] = React.useState<Employer.IEmployer>()
 
-  const handleOpen = (data?: Company.ICompany) => {
+  const handleOpen = (data?: Employer.IEmployer) => {
     setOpen(!open)
-    setCompanyItem({} as Company.ICompany)
+    setEmployerItem({} as Employer.IEmployer)
     if (data) {
-      setCompanyItem(data)
+      setEmployerItem(data)
+    } 
+  }
+
+  const handleDelete = async (data?: Employer.IEmployer) => {
+    try {
+      await api.delete(`employer/${data?.id}/`)
+      setOpenDelAlert(false)
+    } catch (error) {
+      console.log(error);
     }
+    
   }
 
-  const handleDelete = async (data?: Company.ICompany) => {
-    await api.delete(`company/${data?.id}/`)
-    setOpenDelAlert(false)
-  }
-
-  function handleOpenDelAlert(data: Company.ICompany) {
+  function handleOpenDelAlert(data: Employer.IEmployer) {
     setOpenDelAlert(!openDelAlert)
     if (data) {
-      setCompanyItem(data)
+      setEmployerItem(data)
     }
-  }
-
-  const [companyList, setCompanyList] = React.useState<Company.ICompany[]>([])
-
-  async function fetchCompanies() {
-    const { data } = await api.get('company/')
-    setCompanyList(data)
-  }
-  useEffect(() => {
-    if (!open) {
-      fetchCompanies()
-      data = companyList
-    }
-  }, [])
-  
+  } 
 
   return (
     <>
@@ -75,13 +72,15 @@ export default function CompanyTable({ head, data }: TableProps) {
               variant='h4'
               color='blue-gray'
               className='flex items-center justify-between gap-2 font-normal leading-none opacity-70'>
-              <BuildingOffice2Icon strokeWidth={2} className='h-10 w-10' /> Empresas
+              <UserGroupIcon strokeWidth={2} className='h-10 w-10' />Funcionários
             </Typography>
             <Button
               className='flex items-center gap-3'
               onClick={() => handleOpen()}
               color='blue'
-              size='sm'> Nova Empresa
+              size='sm'>
+               Novo
+              funcionário
             </Button>
           </div>
         </CardHeader>
@@ -89,7 +88,7 @@ export default function CompanyTable({ head, data }: TableProps) {
           <table className='mt-4 w-full min-w-max table-auto text-left'>
             <thead>
               <tr>
-                {head.map(head => (
+                {head.map((head) => (
                   <th
                     key={head}
                     className='cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50'>
@@ -111,20 +110,20 @@ export default function CompanyTable({ head, data }: TableProps) {
               </tr>
             </thead>
             <tbody>
-              {data?.map((company, index) => {
+              {data?.map((employer, index) => {
                 const isLast = index === data.length - 1
                 const classes = isLast
                   ? 'p-4'
                   : 'p-4 border-b border-blue-gray-50'
 
                 return (
-                  <tr key={company.name}>
+                  <tr key={employer.name}>
                     <td className={classes}>
                       <div className='flex items-center gap-3'>
                         {/* TODO
                         <Avatar
-                          src={company.img}
-                          alt={company.name}
+                          src={employer.img}
+                          alt={employer.name}
                           size='sm'
                         /> */}
                         <div className='flex flex-col'>
@@ -132,7 +131,7 @@ export default function CompanyTable({ head, data }: TableProps) {
                             variant='small'
                             color='blue-gray'
                             className='font-normal'>
-                            {company.name}
+                            {employer.name}
                           </Typography>
                         </div>
                       </div>
@@ -142,15 +141,29 @@ export default function CompanyTable({ head, data }: TableProps) {
                         <Typography
                           variant='small'
                           color='blue-gray'
+                          className='font-normal'>
+                          {employer.position}
+                        </Typography>
+                        <Typography
+                          variant='small'
+                          color='blue-gray'
                           className='font-normal opacity-70'>
-                          {company.site}
+                          {employer.company.name}
                         </Typography>
                       </div>
                     </td>
                     <td className={classes}>
+                      <Typography
+                        variant='small'
+                        color='blue-gray'
+                        className='font-normal'>
+                        {employer.entry_date}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
                       <Tooltip content='Editar Funcionário'>
                         <IconButton
-                          onClick={() => handleOpen(company)}
+                          onClick={() => handleOpen(employer)}
                           variant='text'
                           color='blue-gray'>
                           <PencilIcon className='h-4 w-4' />
@@ -158,7 +171,7 @@ export default function CompanyTable({ head, data }: TableProps) {
                       </Tooltip>
                       <Tooltip content='Excluir Funcionário'>
                         <IconButton
-                          onClick={() => handleOpenDelAlert(company)}
+                          onClick={() => handleOpenDelAlert(employer)}
                           variant='text'
                           color='red'>
                           <TrashIcon className='h-4 w-4' />
@@ -175,11 +188,11 @@ export default function CompanyTable({ head, data }: TableProps) {
       </Card>
       <ConfimationAlert
         isOpen={openDelAlert}
-        data={companyItem}
-        onConfirm={() => handleDelete(companyItem)}
+        data={employerItem}
+        onConfirm={() => handleDelete(employerItem)}
         onClose={() => setOpenDelAlert(false)}
       />
-      <CompanyModal isOpen={open} data={companyItem} onClose={handleOpen} />
+      <EmployerModal isOpen={open} data={employerItem} onClose={handleOpen} />
     </>
   )
 }

@@ -1,6 +1,6 @@
 declare namespace Employer {
   export interface IEmployer {
-    id?: number
+    id?: number | string;
     name: string
     position: string
     entry_date: string

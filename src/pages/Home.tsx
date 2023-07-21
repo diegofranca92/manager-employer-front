@@ -1,8 +1,7 @@
-import CardDash from '../components/CardDash'
 import api from '../services/api'
 import React, { useEffect } from 'react'
-import EmployerTable from '../components/EmployerTable'
-import CompanyTable from '../components/CompanyTable'
+import EmployerTable from './components/Employer/EmployerTable'
+import CompanyTable from './components/Company/CompanyTable'
 import { Typography } from '@material-tailwind/react'
 export default function Home() {
   const tableCompanyHeader = ['Nome', 'Site', 'Ações']
@@ -30,13 +29,11 @@ export default function Home() {
   return (
     <div className='min-h-full my-16 max-w-screen-xl mx-auto'>
       <article className='mb-12'>
-        <Typography
-          variant='h4'
-          className='mr-4 ml-2  py-1.5 font-medium font-bold'>
+        <Typography variant='h4' className='mr-4 ml-2 py-1.5 font-bold'>
           Seja bem vind@!
         </Typography>
         <Typography className='mr-4 ml-2 py-1.5'>
-         Gerenciador muito útil, com Cadastro de Empresas e Funcionários 😎
+          Gerenciador muito útil, com Cadastro de Empresas e Funcionários 😎
         </Typography>
       </article>
       <main>

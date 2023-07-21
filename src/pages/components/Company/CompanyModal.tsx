@@ -10,7 +10,7 @@ import {
 } from '@material-tailwind/react'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import { useForm } from 'react-hook-form'
-import api from '../services/api'
+import api from '../../../services/api'
 
 type ModalProps = {
   isOpen: boolean
@@ -33,9 +33,7 @@ export default function CompanyModal({ isOpen, onClose, data }: ModalProps) {
     try {
       if (payload.id) {
         await api.put(`company/${payload.id}/`, payload)
-      } else {
-        await api.post('company/', payload)
-      }
+      } else await api.post('company/', payload)
 
       
     } catch (error) {
