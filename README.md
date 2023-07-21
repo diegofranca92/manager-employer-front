@@ -1,8 +1,9 @@
 ## Gerenciador de Funcionários e Empresas
 
 > **Todo**
-- [ ] Mensagens de Required e Feedback, validando o Backend
+- [ ] Aplicar Redux/ContextAPI pra controle de Permissões que foi feito no backend
 - [ ] Corrigir Auth Provider
+- [ ] Mensagens de Required e Feedback, validando o Backend
 - [ ] Melhorar a Componetização
 
 
