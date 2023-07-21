@@ -1,6 +1,5 @@
 import {
   PencilIcon,
-  UserPlusIcon,
   TrashIcon,
   UserGroupIcon
 } from '@heroicons/react/24/solid'

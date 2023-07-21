@@ -1,32 +1,22 @@
 import useAuth from '../hooks/useAuth'
 import { Card, Input, Button, Typography } from '@material-tailwind/react'
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 export default function Login() {
   const { signIn, signed } = useAuth()
   const navigate = useNavigate()
-  const {
-    register,
-    handleSubmit,
-} = useForm<User.LoginFormData>({
+  const { register, handleSubmit } = useForm<User.LoginFormData>({
     defaultValues: {
-        username: "",
-        password: "",
+      username: '',
+      password: ''
     }
-})
-
-useEffect(() => {
-  console.log('signed', signed);
-}, [])
-
+  })
 
   const onSubmit = async (payload: User.LoginFormData) => {
     try {
-      const token = await signIn(payload)
-      console.log(token);
-      navigate('/home')
+      await signIn(payload)
+      
     } catch (error) {
       console.log(error)
     }
@@ -42,17 +32,19 @@ useEffect(() => {
             Seja bem vind@
           </Typography>
 
-          <form onSubmit={handleSubmit(onSubmit)} className='mt-8 mb-2 w-80 max-w-screen-lg sm:w-96'>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className='mt-8 mb-2 w-80 max-w-screen-lg sm:w-96'>
             <div className='mb-4 flex flex-col gap-6'>
               <Input
                 size='lg'
                 type='text'
-                {...register("username")}
+                {...register('username')}
                 label='Usuário'
               />
               <Input
                 type='password'
-                {...register("password")}
+                {...register('password')}
                 size='lg'
                 label='Senha'
               />

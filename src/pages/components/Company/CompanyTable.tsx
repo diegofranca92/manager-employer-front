@@ -43,21 +43,7 @@ export default function CompanyTable({ head, data }: TableProps) {
     if (data) {
       setCompanyItem(data)
     }
-  }
-
-  const [companyList, setCompanyList] = React.useState<Company.ICompany[]>([])
-
-  async function fetchCompanies() {
-    const { data } = await api.get('company/')
-    setCompanyList(data)
-  }
-  useEffect(() => {
-    if (!open) {
-      fetchCompanies()
-      data = companyList
-    }
-  }, [])
-  
+  }  
 
   return (
     <>

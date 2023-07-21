@@ -76,7 +76,7 @@ export default function EmployerModal({ isOpen, onClose, data }: ModalProps) {
               control={control}
               render={({ field }) => (
                 <Select {...field} label={'Selecione a empresa'}>
-                  {companyList.map(company => {                                       
+                  {companyList?.map(company => {                                       
                    return <Option key={company.id} value={company.id?.toString()}>{company.name}</Option>
               })}
                 </Select>

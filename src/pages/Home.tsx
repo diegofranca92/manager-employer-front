@@ -3,6 +3,9 @@ import React, { useEffect } from 'react'
 import EmployerTable from './components/Employer/EmployerTable'
 import CompanyTable from './components/Company/CompanyTable'
 import { Typography } from '@material-tailwind/react'
+import useAuth from '../hooks/useAuth'
+import { Loading } from '../components/Loading'
+
 export default function Home() {
   const tableCompanyHeader = ['Nome', 'Site', 'Ações']
   const tableEmployerHeader = ['Nome', 'Função | Empresa', 'Entrada', 'Ações']
@@ -10,23 +13,40 @@ export default function Home() {
     []
   )
   const [companyList, setCompanyList] = React.useState<Company.ICompany[]>([])
-
+  const [loading, setLoading] = React.useState(false)
+  const { signed } = useAuth()
   async function fetchEmployers() {
-    const { data } = await api.get('employer/')
-    setEmployerList(data)
+    try {
+      const { data } = await api.get('employer/')
+      setEmployerList(data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async function fetchCompanies() {
-    const { data } = await api.get('company/')
-    setCompanyList(data)
+    try {
+      const { data } = await api.get('company/')
+      setCompanyList(data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {
-    fetchEmployers()
-    fetchCompanies()
+    setLoading(true)
+    setTimeout(() => {
+      if (signed) {
+        fetchEmployers()
+        fetchCompanies()
+        setLoading(false)
+      }
+    }, 2000)
   }, [])
 
-  return (
+  return loading ? (
+    <Loading />
+  ) : (
     <div className='min-h-full my-16 max-w-screen-xl mx-auto'>
       <article className='mb-12'>
         <Typography variant='h4' className='mr-4 ml-2 py-1.5 font-bold'>
