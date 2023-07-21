@@ -21,7 +21,7 @@ export default function TimeLine() {
         <article className='flex-1 w-[2rem]'>
           <Typography
             variant='h4'
-            className='mr-4 ml-2  py-1.5 font-medium font-bold'>
+            className='mr-4 ml-2  py-1.5 font-bold'>
             Timeline dos Funcionários
           </Typography>
           <Typography

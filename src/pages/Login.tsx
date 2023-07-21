@@ -1,11 +1,11 @@
 import useAuth from '../hooks/useAuth'
 import { Card, Input, Button, Typography } from '@material-tailwind/react'
 import { useForm } from 'react-hook-form'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 export default function Login() {
   const { signIn, signed } = useAuth()
-  const navigate = useNavigate()
+
   const { register, handleSubmit } = useForm<User.LoginFormData>({
     defaultValues: {
       username: '',
@@ -16,7 +16,6 @@ export default function Login() {
   const onSubmit = async (payload: User.LoginFormData) => {
     try {
       await signIn(payload)
-      
     } catch (error) {
       console.log(error)
     }
@@ -39,11 +38,13 @@ export default function Login() {
               <Input
                 size='lg'
                 type='text'
+                required
                 {...register('username')}
                 label='Usuário'
               />
               <Input
                 type='password'
+                required
                 {...register('password')}
                 size='lg'
                 label='Senha'
